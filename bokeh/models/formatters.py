@@ -539,23 +539,23 @@ class DatetimeTickFormatter(TickFormatter):
     '''
     microseconds = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``microseconds``"),
-                        default=['%fus']).accepts(String, lambda fmt: [fmt])
+                        default=['%H:%M:%S:%f']).accepts(String, lambda fmt: [fmt]) # Add context: %
 
     milliseconds = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``milliseconds``"),
-                        default=['%3Nms', '%S.%3Ns']).accepts(String, lambda fmt: [fmt])
+                        default=['%H:%M:%S:%3N']).accepts(String, lambda fmt: [fmt])
 
     seconds      = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``seconds``"),
-                        default=['%Ss']).accepts(String, lambda fmt: [fmt])
+                        default=['%H:%M:%S']).accepts(String, lambda fmt: [fmt])
 
     minsec       = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``minsec`` (for combined minutes and seconds)"),
-                        default=[':%M:%S']).accepts(String, lambda fmt: [fmt])
+                        default=['%H:%M:%S']).accepts(String, lambda fmt: [fmt])
 
     minutes      = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``minutes``"),
-                        default=[':%M', '%Mm']).accepts(String, lambda fmt: [fmt])
+                        default=['%H:%M']).accepts(String, lambda fmt: [fmt])
 
     hourmin      = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``hourmin`` (for combined hours and minutes)"),
@@ -563,19 +563,25 @@ class DatetimeTickFormatter(TickFormatter):
 
     hours        = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``hours``"),
-                        default=['%Hh', '%H:%M']).accepts(String, lambda fmt: [fmt])
-
+                        default=['%H:%M']).accepts(String, lambda fmt: [fmt]) # Add context: %b %d, %Y.
+    # If several hours are displayed across two consecutive days/months, change default=['%b %d, %H:%M'] and context=['%Y'].
+    # If several hours are displayed across two consecutive years, change default=['%b %d, %Y, %H:%M'] and context=None.
+    
+    # Probably need to add an intermediate "dayhour" format
+    
     days         = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``days``"),
-                        default=['%m/%d', '%a%d']).accepts(String, lambda fmt: [fmt])
-
+                        default=['%b %d']).accepts(String, lambda fmt: [fmt]) # Add context=['%Y']
+    # If several days are displayed across two consecutive years, set default=['%b %d, %Y']; context=None
+    
     months       = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``months``"),
-                        default=['%m/%Y', '%b %Y']).accepts(String, lambda fmt: [fmt])
-
+                        default=['%b']).accepts(String, lambda fmt: [fmt]) # Add context=['%Y']
+    # If several months are displayed across two consecutive years, set default=['%b %Y']; context=None
+    
     years        = List(String,
                         help=_DATETIME_TICK_FORMATTER_HELP("``years``"),
-                        default=['%Y']).accepts(String, lambda fmt: [fmt])
+                        default=['%Y']).accepts(String, lambda fmt: [fmt]) # context=None
 
 #-----------------------------------------------------------------------------
 # Dev API
